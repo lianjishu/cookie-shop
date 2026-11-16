@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.lianjishu.dao.ReviewMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO review(content, rating, order_id, goods_id, user_id, created_at)
+        VALUES(#{content}, #{rating}, #{order_id}, #{goods_id}, #{user_id}, NOW())
+    </insert>
+
+    <select id="selectByGoodsId" resultType="Review">
+        SELECT * FROM review WHERE goods_id = #{goodsId} ORDER BY created_at DESC
+    </select>
+
+    <select id="selectAverageRating" resultType="double">
+        SELECT COALESCE(AVG(rating), 0) FROM review WHERE goods_id = #{goodsId}
+    </select>
+
+    <select id="selectCountByGoodsId" resultType="int">
+        SELECT COUNT(*) FROM review WHERE goods_id = #{goodsId}
+    </select>
+
+    <select id="selectCountByOrderId" resultType="int">
+        SELECT COUNT(*) FROM review WHERE order_id = #{orderId}
+    </select>
+</mapper>
