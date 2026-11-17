@@ -1,6 +1,6 @@
 package io.github.lianjishu.service;
 
-import io.github.lianjishu.domain.Goods;
+import io.github.lianjishu.entity.Goods;
 
 import java.util.List;
 

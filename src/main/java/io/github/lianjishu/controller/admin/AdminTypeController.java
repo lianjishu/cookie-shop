@@ -1,6 +1,6 @@
 package io.github.lianjishu.controller.admin;
 
-import io.github.lianjishu.domain.Type;
+import io.github.lianjishu.entity.Type;
 import io.github.lianjishu.service.TypeService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

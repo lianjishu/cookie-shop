@@ -1,6 +1,6 @@
 package io.github.lianjishu.service;
 
-import io.github.lianjishu.domain.Cart;
+import io.github.lianjishu.entity.Cart;
 
 import java.util.List;
 

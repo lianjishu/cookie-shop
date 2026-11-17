@@ -1,9 +1,9 @@
 package io.github.lianjishu.controller;
 
-import io.github.lianjishu.domain.Goods;
-import io.github.lianjishu.domain.Page;
-import io.github.lianjishu.domain.Review;
-import io.github.lianjishu.domain.Type;
+import io.github.lianjishu.entity.Goods;
+import io.github.lianjishu.entity.Page;
+import io.github.lianjishu.entity.Review;
+import io.github.lianjishu.entity.Type;
 import io.github.lianjishu.service.GoodsService;
 import io.github.lianjishu.service.RecommendService;
 import io.github.lianjishu.service.ReviewService;

@@ -1,6 +1,6 @@
 package io.github.lianjishu.controller.admin;
 
-import io.github.lianjishu.domain.Page;
+import io.github.lianjishu.entity.Page;
 import io.github.lianjishu.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

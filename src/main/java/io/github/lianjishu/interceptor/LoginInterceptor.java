@@ -1,22 +1,29 @@
 package io.github.lianjishu.interceptor;
 
-import io.github.lianjishu.domain.User;
+import io.github.lianjishu.entity.User;
 import io.github.lianjishu.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * 替代旧项目的 AdminAuthFilter：拦截 /admin/**，
  * 未登录管理员时尝试用 username Cookie 自动登录，失败则跳转登录页
  */
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public LoginInterceptor(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

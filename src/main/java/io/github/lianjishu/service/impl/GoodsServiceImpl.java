@@ -1,11 +1,11 @@
 package io.github.lianjishu.service.impl;
 
-import io.github.lianjishu.dao.GoodsMapper;
-import io.github.lianjishu.dao.RecommendMapper;
-import io.github.lianjishu.dao.TypeMapper;
-import io.github.lianjishu.domain.Goods;
-import io.github.lianjishu.domain.Page;
-import io.github.lianjishu.domain.Type;
+import io.github.lianjishu.mapper.GoodsMapper;
+import io.github.lianjishu.mapper.RecommendMapper;
+import io.github.lianjishu.mapper.TypeMapper;
+import io.github.lianjishu.entity.Goods;
+import io.github.lianjishu.entity.Page;
+import io.github.lianjishu.entity.Type;
 import io.github.lianjishu.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

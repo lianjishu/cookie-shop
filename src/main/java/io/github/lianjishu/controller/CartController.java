@@ -1,7 +1,7 @@
 package io.github.lianjishu.controller;
 
-import io.github.lianjishu.domain.Cart;
-import io.github.lianjishu.domain.User;
+import io.github.lianjishu.entity.Cart;
+import io.github.lianjishu.entity.User;
 import io.github.lianjishu.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

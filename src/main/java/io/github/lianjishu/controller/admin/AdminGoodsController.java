@@ -1,7 +1,7 @@
 package io.github.lianjishu.controller.admin;
 
-import io.github.lianjishu.domain.Goods;
-import io.github.lianjishu.domain.Page;
+import io.github.lianjishu.entity.Goods;
+import io.github.lianjishu.entity.Page;
 import io.github.lianjishu.service.GoodsService;
 import io.github.lianjishu.service.OrderService;
 import io.github.lianjishu.service.RecommendService;

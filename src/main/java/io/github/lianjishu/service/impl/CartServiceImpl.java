@@ -1,7 +1,7 @@
 package io.github.lianjishu.service.impl;
 
-import io.github.lianjishu.dao.CartMapper;
-import io.github.lianjishu.domain.Cart;
+import io.github.lianjishu.mapper.CartMapper;
+import io.github.lianjishu.entity.Cart;
 import io.github.lianjishu.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

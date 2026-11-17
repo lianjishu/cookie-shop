@@ -1,7 +1,7 @@
 package io.github.lianjishu.service.impl;
 
-import io.github.lianjishu.dao.RecommendMapper;
-import io.github.lianjishu.domain.Goods;
+import io.github.lianjishu.mapper.RecommendMapper;
+import io.github.lianjishu.entity.Goods;
 import io.github.lianjishu.service.RecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.lianjishu.mapper.OrderMapper">
+
+    <!-- 订单结果映射：关联下单用户 + collection 嵌套查询订单明细（教材第4章一对多关联） -->
+    <resultMap id="orderWithItemsMap" type="Order">
+        <id property="id" column="id"/>
+        <result property="total" column="total"/>
+        <result property="amount" column="amount"/>
+        <result property="status" column="status"/>
+        <result property="paytype" column="paytype"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <result property="datetime" column="datetime"/>
+        <result property="user_id" column="user_id"/>
+        <association property="user" javaType="User">
+            <id property="id" column="user_id"/>
+            <result property="username" column="username"/>
+        </association>
+        <collection property="itemList" ofType="OrderItem"
+                    column="{orderId=id}" select="selectItemsWithGoodsName"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order`(total, amount, status, paytype, name, phone, address, datetime, user_id)
+        VALUES(#{total}, #{amount}, #{status}, #{paytype}, #{name}, #{phone}, #{address}, NOW(), #{user_id})
+    </insert>
+
+    <select id="selectByUserId" resultType="Order">
+        SELECT o.*, u.name AS user_name FROM `order` o
+        LEFT JOIN user u ON o.user_id = u.id
+        WHERE o.user_id = #{userId} ORDER BY o.datetime DESC
+    </select>
+
+    <select id="selectById" resultType="Order">
+        SELECT o.*, u.name AS user_name FROM `order` o
+        LEFT JOIN user u ON o.user_id = u.id
+        WHERE o.id = #{id}
+    </select>
+
+    <select id="selectItemsByOrderId" resultType="OrderItem">
+        SELECT id, price, amount, goods_id, order_id FROM orderitem WHERE order_id = #{orderId}
+    </select>
+
+    <insert id="insertItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orderitem(price, amount, goods_id, order_id)
+        VALUES(#{price}, #{amount}, #{goods_id}, #{order_id})
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE `order` SET status = #{status} WHERE id = #{orderId}
+    </update>
+
+    <!-- 动态 SQL：status=0 查全部订单，否则按状态过滤 -->
+    <select id="selectAllByStatus" resultMap="orderWithItemsMap">
+        SELECT o.*, u.username FROM `order` o
+        INNER JOIN user u ON o.user_id = u.id
+        <where>
+            <if test="status != 0">o.status = #{status}</if>
+        </where>
+        ORDER BY o.datetime DESC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getOrderCount" resultType="int">
+        <choose>
+            <when test="status == 0">SELECT COUNT(*) FROM `order`</when>
+            <otherwise>SELECT COUNT(*) FROM `order` WHERE status = #{status}</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectItemsWithGoodsName" resultType="OrderItem">
+        SELECT oi.id, oi.price, oi.amount, oi.goods_id, oi.order_id, g.name AS goodsname
+        FROM orderitem oi, goods g
+        WHERE oi.order_id = #{orderId} AND oi.goods_id = g.id
+    </select>
+
+    <delete id="deleteOrder">
+        DELETE FROM `order` WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteOrderItems">
+        DELETE FROM orderitem WHERE order_id = #{orderId}
+    </delete>
+</mapper>

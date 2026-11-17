@@ -1,7 +1,7 @@
 package io.github.lianjishu.service;
 
-import io.github.lianjishu.domain.User;
-import io.github.lianjishu.domain.Page;
+import io.github.lianjishu.entity.User;
+import io.github.lianjishu.entity.Page;
 
 public interface UserService {
 

@@ -1,7 +1,7 @@
 package io.github.lianjishu.controller;
 
-import io.github.lianjishu.domain.Goods;
-import io.github.lianjishu.domain.Type;
+import io.github.lianjishu.entity.Goods;
+import io.github.lianjishu.entity.Type;
 import io.github.lianjishu.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,10 +1,10 @@
 package io.github.lianjishu.service.impl;
 
-import io.github.lianjishu.dao.OrderMapper;
-import io.github.lianjishu.domain.Cart;
-import io.github.lianjishu.domain.Order;
-import io.github.lianjishu.domain.OrderItem;
-import io.github.lianjishu.domain.Page;
+import io.github.lianjishu.mapper.OrderMapper;
+import io.github.lianjishu.entity.Cart;
+import io.github.lianjishu.entity.Order;
+import io.github.lianjishu.entity.OrderItem;
+import io.github.lianjishu.entity.Page;
 import io.github.lianjishu.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

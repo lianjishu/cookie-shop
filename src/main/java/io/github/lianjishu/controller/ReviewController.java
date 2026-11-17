@@ -1,9 +1,9 @@
 package io.github.lianjishu.controller;
 
-import io.github.lianjishu.domain.Order;
-import io.github.lianjishu.domain.OrderItem;
-import io.github.lianjishu.domain.Review;
-import io.github.lianjishu.domain.User;
+import io.github.lianjishu.entity.Order;
+import io.github.lianjishu.entity.OrderItem;
+import io.github.lianjishu.entity.Review;
+import io.github.lianjishu.entity.User;
 import io.github.lianjishu.service.OrderService;
 import io.github.lianjishu.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;

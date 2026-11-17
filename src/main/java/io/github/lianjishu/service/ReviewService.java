@@ -1,6 +1,6 @@
 package io.github.lianjishu.service;
 
-import io.github.lianjishu.domain.Review;
+import io.github.lianjishu.entity.Review;
 
 import java.util.List;
 

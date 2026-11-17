@@ -1,8 +1,8 @@
 package io.github.lianjishu.service.impl;
 
-import io.github.lianjishu.dao.UserMapper;
-import io.github.lianjishu.domain.Page;
-import io.github.lianjishu.domain.User;
+import io.github.lianjishu.mapper.UserMapper;
+import io.github.lianjishu.entity.Page;
+import io.github.lianjishu.entity.User;
 import io.github.lianjishu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

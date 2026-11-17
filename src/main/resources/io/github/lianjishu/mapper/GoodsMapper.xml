@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.lianjishu.mapper.GoodsMapper">
+
+    <!-- 商品结果映射：type_name 列同时填充 type_name 字段与关联的 type 对象（教材第4章关联映射） -->
+    <resultMap id="goodsMap" type="Goods">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cover" column="cover"/>
+        <result property="image1" column="image1"/>
+        <result property="image2" column="image2"/>
+        <result property="price" column="price"/>
+        <result property="intro" column="intro"/>
+        <result property="stock" column="stock"/>
+        <result property="type_id" column="type_id"/>
+        <result property="type_name" column="type_name"/>
+        <result property="type.id" column="type_id"/>
+        <result property="type.name" column="type_name"/>
+    </resultMap>
+
+    <sql id="goodsWithTypeName">
+        SELECT g.*, t.name AS type_name FROM goods g LEFT JOIN type t ON g.type_id = t.id
+    </sql>
+
+    <select id="selectAll" resultMap="goodsMap">
+        <include refid="goodsWithTypeName"/>
+    </select>
+
+    <select id="selectByTypeId" resultMap="goodsMap">
+        <include refid="goodsWithTypeName"/> WHERE g.type_id = #{typeId}
+    </select>
+
+    <select id="selectByPage" resultMap="goodsMap">
+        <include refid="goodsWithTypeName"/> LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="selectByTypeIdByPage" resultMap="goodsMap">
+        <include refid="goodsWithTypeName"/> WHERE g.type_id = #{typeId} LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="selectById" resultMap="goodsMap">
+        <include refid="goodsWithTypeName"/> WHERE g.id = #{id}
+    </select>
+
+    <!-- 动态 SQL：按关键字模糊搜索商品名称或简介（教材第3章） -->
+    <select id="search" resultMap="goodsMap">
+        <include refid="goodsWithTypeName"/>
+        <where>
+            <if test="keyword != null and keyword != ''">
+                g.name LIKE CONCAT('%', #{keyword}, '%') OR g.intro LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM goods
+    </select>
+
+    <select id="selectCountByTypeId" resultType="int">
+        SELECT COUNT(*) FROM goods WHERE type_id = #{typeId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO goods(name, cover, image1, image2, price, intro, stock, type_id)
+        VALUES(#{name}, #{cover}, #{image1}, #{image2}, #{price}, #{intro}, #{stock}, #{type_id})
+    </insert>
+
+    <update id="update">
+        UPDATE goods SET name=#{name}, cover=#{cover}, image1=#{image1}, image2=#{image2},
+        price=#{price}, intro=#{intro}, stock=#{stock}, type_id=#{type_id}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM goods WHERE id = #{id}
+    </delete>
+
+    <!-- 动态 SQL：type=0 查全部商品，否则查对应推荐位（choose/when/otherwise） -->
+    <select id="selectGoodsByRecommend" resultMap="goodsMap">
+        <include refid="goodsWithTypeName"/>
+        <choose>
+            <when test="type == 0">
+                ORDER BY g.id LIMIT #{offset}, #{limit}
+            </when>
+            <otherwise>
+                AND g.id IN (SELECT goods_id FROM recommend WHERE type = #{type})
+                ORDER BY g.id LIMIT #{offset}, #{limit}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getRecommendCount" resultType="int">
+        <choose>
+            <when test="type == 0">SELECT COUNT(*) FROM goods</when>
+            <otherwise>SELECT COUNT(*) FROM recommend WHERE type = #{type}</otherwise>
+        </choose>
+    </select>
+</mapper>

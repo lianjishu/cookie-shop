@@ -1,7 +1,7 @@
 package io.github.lianjishu.controller.admin;
 
-import io.github.lianjishu.domain.Page;
-import io.github.lianjishu.domain.User;
+import io.github.lianjishu.entity.Page;
+import io.github.lianjishu.entity.User;
 import io.github.lianjishu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

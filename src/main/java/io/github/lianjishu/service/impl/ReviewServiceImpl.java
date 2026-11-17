@@ -1,7 +1,7 @@
 package io.github.lianjishu.service.impl;
 
-import io.github.lianjishu.dao.ReviewMapper;
-import io.github.lianjishu.domain.Review;
+import io.github.lianjishu.mapper.ReviewMapper;
+import io.github.lianjishu.entity.Review;
 import io.github.lianjishu.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

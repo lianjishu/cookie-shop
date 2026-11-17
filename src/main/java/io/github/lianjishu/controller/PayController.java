@@ -4,7 +4,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
-import io.github.lianjishu.domain.Order;
+import io.github.lianjishu.entity.Order;
 import io.github.lianjishu.service.OrderService;
 import io.github.lianjishu.utils.AlipayConfig;
 import jakarta.servlet.http.HttpServletRequest;

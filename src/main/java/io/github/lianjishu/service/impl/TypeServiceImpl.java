@@ -1,7 +1,7 @@
 package io.github.lianjishu.service.impl;
 
-import io.github.lianjishu.dao.TypeMapper;
-import io.github.lianjishu.domain.Type;
+import io.github.lianjishu.mapper.TypeMapper;
+import io.github.lianjishu.entity.Type;
 import io.github.lianjishu.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

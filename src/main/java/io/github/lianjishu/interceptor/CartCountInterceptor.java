@@ -1,20 +1,27 @@
 package io.github.lianjishu.interceptor;
 
-import io.github.lianjishu.domain.User;
+import io.github.lianjishu.entity.User;
 import io.github.lianjishu.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * 替代旧项目的 CartCountFilter：把当前用户购物车数量放入 request 属性 cartCount
  */
+@Component
 public class CartCountInterceptor implements HandlerInterceptor {
 
+    private final CartService cartService;
+
     @Autowired
-    private CartService cartService;
+    public CartCountInterceptor(CartService cartService) {
+        this.cartService = cartService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

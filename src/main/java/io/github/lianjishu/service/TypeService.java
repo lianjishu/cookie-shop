@@ -1,6 +1,6 @@
 package io.github.lianjishu.service;
 
-import io.github.lianjishu.domain.Type;
+import io.github.lianjishu.entity.Type;
 
 import java.util.List;
 
