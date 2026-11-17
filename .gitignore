@@ -17,4 +17,7 @@ Thumbs.db
 *.log
 
 # properties
-src/main/resources/jdbc.properties
+cookie-shop-web/src/main/resources/jdbc.properties
+
+# IDE tooling
+/.qoder-credits/

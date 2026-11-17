@@ -1,5 +1,6 @@
 package io.github.lianjishu;
 
+import io.github.lianjishu.config.RootConfig;
 import io.github.lianjishu.entity.Goods;
 import io.github.lianjishu.entity.Page;
 import io.github.lianjishu.entity.Type;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
  * 运行前提：MySQL 中已导入 cookie-shop/sql/cookieshop_copied.sql
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:application-dao.xml", "classpath:application-service.xml"})
+@ContextConfiguration(classes = RootConfig.class)
 public class SSMIntegrationTest {
 
     @Autowired

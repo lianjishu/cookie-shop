@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement //开启事务管理
+@PropertySource("classpath:jdbc.properties")
 @MapperScan("io.github.lianjishu.mapper")
 @ComponentScan(basePackages = {
         "io.github.lianjishu.service",
