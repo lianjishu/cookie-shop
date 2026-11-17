@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,7 +38,18 @@ public class AdminTypeController {
         return "forward:/admin/type_list";
     }
 
-    @RequestMapping("/admin/type_edit")
+    /**
+     * 打开编辑页（GET）：原来靠直接访问 admin/type_edit.jsp
+     */
+    @GetMapping("/admin/type_edit")
+    public String typeEditPage() {
+        return "admin/type_edit";
+    }
+
+    /**
+     * 提交修改（POST）：原 @RequestMapping 不限方法，点链接就会写库，这里收窄为 POST
+     */
+    @PostMapping("/admin/type_edit")
     public String typeEdit(@RequestParam("id") int id, @RequestParam("name") String name) {
         Type t = new Type(id, name);
         typeService.update(t);

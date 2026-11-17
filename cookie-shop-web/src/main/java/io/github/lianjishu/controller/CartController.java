@@ -65,7 +65,7 @@ public class CartController {
     public String cartList(HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
         List<Cart> cartList = cartService.getCartByUserId(user.getId());
         model.addAttribute("cartList", cartList);

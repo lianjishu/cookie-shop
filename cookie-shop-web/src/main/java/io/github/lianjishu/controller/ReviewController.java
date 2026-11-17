@@ -33,7 +33,7 @@ public class ReviewController {
                              HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
         if (orderId == null) {
             return "redirect:/order_list";
@@ -58,7 +58,7 @@ public class ReviewController {
                             HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
         if (orderId == null || rating == null || content == null || content.trim().isEmpty()) {
             return "redirect:/order_list";

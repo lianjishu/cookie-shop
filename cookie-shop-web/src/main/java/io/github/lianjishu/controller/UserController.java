@@ -88,13 +88,34 @@ public class UserController {
         return "user_register";
     }
 
+    /**
+     * 注册页（原来只能直接访问 user_register.jsp）
+     */
+    @GetMapping("/user_register")
+    public String registerPage() {
+        return "user_register";
+    }
+
+    /**
+     * 个人中心入口（原来只能直接访问 user_center.jsp）
+     * <p>JSP 里 ${user} 直接从 session 取，无需 model；无 session 则回首页。</p>
+     */
+    @GetMapping("/user_center")
+    public String userCenter(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return "redirect:/index";
+        }
+        return "user_center";
+    }
+
     @PostMapping("/user_changepwd")
     public String changePwd(@RequestParam("password") String password,
                             @RequestParam("newPassword") String newPassword,
                             HttpServletRequest request, Model model) {
         User loginUser = (User) request.getSession().getAttribute("user");
         if (loginUser == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
         if (!loginUser.getPassword().equals(password)) {
             model.addAttribute("failMsg", "原密码错误！");
@@ -114,7 +135,7 @@ public class UserController {
                                 HttpServletRequest request, Model model) {
         User loginUser = (User) request.getSession().getAttribute("user");
         if (loginUser == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
         loginUser.setName(name);
         loginUser.setPhone(phone);

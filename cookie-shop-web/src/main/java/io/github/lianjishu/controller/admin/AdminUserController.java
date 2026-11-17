@@ -6,6 +6,7 @@ import io.github.lianjishu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +48,14 @@ public class AdminUserController {
         return "admin/user_add";
     }
 
+    /**
+     * 新增客户页（原来只能直接访问 admin/user_add.jsp）
+     */
+    @GetMapping("/admin/user_add")
+    public String userAddPage() {
+        return "admin/user_add";
+    }
+
     @RequestMapping("/admin/user_delete")
     public String userDelete(@RequestParam("id") int id, Model model) {
         boolean isSuccess = userService.delete(id);
@@ -68,6 +77,14 @@ public class AdminUserController {
     public String userEdit(@ModelAttribute User user) {
         userService.updateUserAddress(user);
         return "forward:/admin/user_list";
+    }
+
+    /**
+     * 重置密码页（GET）：原来靠直接访问 admin/user_reset.jsp，页面只读 ${param.*}
+     */
+    @GetMapping("/admin/user_reset")
+    public String userResetPage() {
+        return "admin/user_reset";
     }
 
     @PostMapping("/admin/user_reset")

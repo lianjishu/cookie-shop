@@ -43,7 +43,7 @@ public class OrderController {
                               HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
 
         List<Cart> cartList = cartService.getCartByUserId(user.getId());
@@ -86,7 +86,7 @@ public class OrderController {
     public String orderList(HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
 
         List<Order> orderList = orderService.getOrdersByUserId(user.getId());
@@ -106,7 +106,7 @@ public class OrderController {
                               HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
         if (orderId == null) {
             return "redirect:/order_list";
@@ -126,7 +126,7 @@ public class OrderController {
                               HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "redirect:/user_login.jsp";
+            return "redirect:/user_login";
         }
         if (orderId == null) {
             return "redirect:/order_list";

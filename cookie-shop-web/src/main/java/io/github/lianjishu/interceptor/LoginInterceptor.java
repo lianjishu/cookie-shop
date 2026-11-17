@@ -48,7 +48,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                     }
                 }
             }
-            response.sendRedirect(request.getContextPath() + "/user_login.jsp");
+            response.sendRedirect(request.getContextPath() + "/user_login");
             return false;
         }
         return true;
