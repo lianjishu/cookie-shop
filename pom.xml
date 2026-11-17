@@ -64,6 +64,13 @@
                 <scope>test</scope>
             </dependency>
 
+            <!-- JSON 序列化：@ResponseBody 返回 Result 需要 Jackson（@EnableWebMvc 检测到即自动注册转换器） -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.17.2</version>
+            </dependency>
+
             <!-- MyBatis 相关依赖 -->
             <dependency>
                 <groupId>org.mybatis</groupId>

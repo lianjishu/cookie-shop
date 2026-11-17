@@ -5,9 +5,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>客户修改</title>
-	<meta charset="utf-8"/>
-	<link rel="stylesheet" href="css/bootstrap.css"/>
+	<title>客户添加</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="css/bootstrap.css" />
 	<style>
 		body {
 			background: #f5f7fa;
@@ -47,17 +47,17 @@
 			gap: 12px;
 		}
 
-		.user-edit-form {
+		.user-add-form {
 			max-width: 760px;
 			margin: 0 auto;
 		}
 
-		.user-edit-form .form-group {
+		.user-add-form .form-group {
 			margin-left: 0;
 			margin-right: 0;
 		}
 
-		.user-edit-form .control-label {
+		.user-add-form .control-label {
 			text-align: right;
 		}
 	</style>
@@ -65,52 +65,61 @@
 <body>
 <div class="container">
 
-	<jsp:include page="/admin/header.jsp"></jsp:include>
+	<jsp:include page="header.jsp"></jsp:include>
+
+	<c:if test="${!empty failMsg }">
+		<div class="alert alert-danger">${failMsg }</div>
+	</c:if>
 
 	<div class="admin-form-page">
 		<div class="admin-form-card">
 			<div class="admin-form-header">
 				<div class="admin-form-title">
-					<h3>客户修改</h3>
-					<span class="text-muted">修改客户收货信息</span>
+					<h3>客户添加</h3>
+					<span class="text-muted">添加新的客户信息</span>
 				</div>
 			</div>
 
-			<form class="form-horizontal user-edit-form" action="${pageContext.request.contextPath}/admin/user_edit" method="post">
-				<input type="hidden" name="id" value="${u.id }">
+			<form class="form-horizontal user-add-form" action="${pageContext.request.contextPath}/admin/user_add" method="post">
 				<div class="form-group">
-					<label class="col-sm-2 control-label">用户名</label>
+					<label for="input_username" class="col-sm-2 control-label">用户名</label>
 					<div class="col-sm-10">
-						<p class="form-control-static">${u.username }</p>
+						<input type="text" class="form-control" id="input_username" name="username" required="required" value="${u.username }" />
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">邮箱</label>
+					<label for="input_email" class="col-sm-2 control-label">邮箱</label>
 					<div class="col-sm-10">
-						<p class="form-control-static">${u.email }</p>
+						<input type="text" class="form-control" id="input_email" name="email" required="required" value="${u.email }"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="input_password" class="col-sm-2 control-label">密码</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="input_password" name="password" required="required" value="${u.password }"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="input_name" class="col-sm-2 control-label">收货人</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="input_name" name="name" value="${u.name }">
+						<input type="text" class="form-control" id="input_name" name="name" value="${u.name }"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="input_phone" class="col-sm-2 control-label">电话</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="input_phone" name="phone" value="${u.phone }">
+						<input type="text" class="form-control" id="input_phone" name="phone" value="${u.phone }" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="input_address" class="col-sm-2 control-label">地址</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="input_address" name="address" value="${u.address }">
+						<input type="text" class="form-control" id="input_address" name="address" value="${u.address }"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-success">提交修改</button>
+						<button type="submit" class="btn btn-success">提交保存</button>
 					</div>
 				</div>
 			</form>

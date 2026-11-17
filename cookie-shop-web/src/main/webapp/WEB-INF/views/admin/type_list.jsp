@@ -1,4 +1,4 @@
-﻿<%@ page isELIgnored="false" language="java" contentType="text/html; charset=utf-8"
+<%@ page isELIgnored="false" language="java" contentType="text/html; charset=utf-8"
 			 pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -86,7 +86,7 @@
 <body>
 <div class="container">
 
-	<jsp:include page="/admin/header.jsp"></jsp:include>
+	<jsp:include page="header.jsp"></jsp:include>
 
 	<div class="type-list-page">
 		<div class="type-list-card">
@@ -125,7 +125,7 @@
 						<td>${t.id }</td>
 						<td>${t.name }</td>
 						<td class="type-actions">
-							<a class="btn btn-primary btn-sm" href="${pageContext.request.contextPath}/admin/type_edit.jsp?id=${t.id }&name=${t.encodeName }">修改</a>
+							<a class="btn btn-primary btn-sm" href="${pageContext.request.contextPath}/admin/type_edit?id=${t.id }&name=${t.encodeName }">修改</a>
 							<a class="btn btn-danger btn-sm" href="${pageContext.request.contextPath}/admin/type_delete?id=${t.id }">删除</a>
 						</td>
 					</tr>

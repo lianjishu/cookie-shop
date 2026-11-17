@@ -1,4 +1,4 @@
-﻿<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
@@ -155,7 +155,7 @@
 <body>
 <div class="container">
 
-	<jsp:include page="/admin/header.jsp"></jsp:include>
+	<jsp:include page="header.jsp"></jsp:include>
 
 	<div class="admin-list-page">
 		<div class="admin-list-card">

@@ -1,4 +1,4 @@
-﻿<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
@@ -168,7 +168,7 @@
 			</table>
 
 			<div class="admin-pagination">
-				<jsp:include page="/page.jsp">
+				<jsp:include page="../page.jsp">
 					<jsp:param value="/admin/order_list" name="url"/>
 					<jsp:param value="&status=${status}" name="param"/>
 				</jsp:include>

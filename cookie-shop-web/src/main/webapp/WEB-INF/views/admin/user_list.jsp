@@ -1,4 +1,4 @@
-﻿<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
@@ -90,7 +90,7 @@
 					<h3>客户管理</h3>
 					<span class="text-muted">管理客户账户与收货信息</span>
 				</div>
-				<a class="btn btn-warning" href="user_add.jsp">添加客户</a>
+				<a class="btn btn-warning" href="${pageContext.request.contextPath}/admin/user_add">添加客户</a>
 			</div>
 
 			<c:if test="${!empty msg }">
@@ -122,7 +122,7 @@
 						<td>${u.phone }</td>
 						<td>${u.address }</td>
 						<td class="admin-actions">
-							<a class="btn btn-info btn-sm" href="${pageContext.request.contextPath}/admin/user_reset.jsp?id=${u.id }&username=${u.username }&email=${u.email }">重置密码</a>
+							<a class="btn btn-info btn-sm" href="${pageContext.request.contextPath}/admin/user_reset?id=${u.id }&username=${u.username }&email=${u.email }">重置密码</a>
 							<a class="btn btn-primary btn-sm" href="${pageContext.request.contextPath}/admin/user_editshow?id=${u.id }">修改</a>
 							<a class="btn btn-danger btn-sm" href="${pageContext.request.contextPath}/admin/user_delete?id=${u.id }">删除</a>
 						</td>
@@ -132,7 +132,7 @@
 			</table>
 
 			<div class="admin-pagination">
-				<jsp:include page="/page.jsp">
+				<jsp:include page="../page.jsp">
 					<jsp:param value="/admin/user_list" name="url"/>
 				</jsp:include>
 			</div>

@@ -1,11 +1,14 @@
 package io.github.lianjishu.controller;
 
+import io.github.lianjishu.common.Result;
+import io.github.lianjishu.common.ResultCode;
 import io.github.lianjishu.entity.Cart;
 import io.github.lianjishu.entity.User;
+import io.github.lianjishu.exception.BusinessException;
 import io.github.lianjishu.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,81 +16,102 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 替代旧 CartAddServlet(/cart_add)、CartListServlet(/cart_list)。
- * cart_add/cart_list 的 POST 返回 JSON（与旧版格式一致，cart.js 直接解析）
+ *
+ * <p>本控制器同时存在两类接口，刻意不做「一刀切」：</p>
+ * <ul>
+ *     <li><b>数据接口</b>：{@code /cart_add}、{@code POST /cart_list}，返回统一的
+ *         {@link Result}（{code, message, data}），由 cart.js 消费；</li>
+ *     <li><b>视图接口</b>：{@code GET /cart_list}，仍返回 JSP 视图名。</li>
+ * </ul>
  */
 @Controller
 public class CartController {
 
+    private static final Logger log = LoggerFactory.getLogger(CartController.class);
+
     @Autowired
     private CartService cartService;
 
+    /**
+     * 加入购物车（数据接口）
+     *
+     * <p>成功：{@code {"code":200,"message":"success","data":{"cartCount":N}}}；
+     * 未登录：{@code code=4002}；缺参数：{@code code=4001}；未预期异常：{@code code=5000}。</p>
+     */
     @RequestMapping("/cart_add")
-    public void cartAdd(@RequestParam(value = "goods_id", required = false) Integer goodsId,
-                        @RequestParam(value = "amount", required = false, defaultValue = "1") Integer amount,
-                        HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+    @ResponseBody
+    public Result<Map<String, Object>> cartAdd(
+            @RequestParam(value = "goods_id", required = false) Integer goodsId,
+            @RequestParam(value = "amount", required = false, defaultValue = "1") Integer amount,
+            HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            out.print("{\"success\":false,\"message\":\"请先登录\"}");
-            return;
+            throw new BusinessException(ResultCode.NOT_LOGIN);
         }
-
         if (goodsId == null) {
-            out.print("{\"success\":false,\"message\":\"参数错误\"}");
-            return;
+            throw new BusinessException(ResultCode.PARAM_ERROR);
         }
 
         try {
-            boolean success = cartService.addToCart(user.getId(), goodsId, amount);
-            if (success) {
-                int cartCount = cartService.getCartCount(user.getId());
-                out.print("{\"success\":true,\"message\":\"添加成功\",\"cartCount\":" + cartCount + "}");
-            } else {
-                out.print("{\"success\":false,\"message\":\"添加失败\"}");
+            if (!cartService.addToCart(user.getId(), goodsId, amount)) {
+                throw new BusinessException(ResultCode.CART_OPERATION_FAIL);
             }
+            Map<String, Object> data = new HashMap<>();
+            data.put("cartCount", cartService.getCartCount(user.getId()));
+            return Result.success(data);
+        } catch (BusinessException e) {
+            throw e; // 交给全局处理器，保持错误码语义
         } catch (RuntimeException e) {
-            String msg = e.getMessage() != null ? e.getMessage().replace("\"", "'") : "未知错误";
-            out.print("{\"success\":false,\"message\":\"" + msg + "\"}");
+            log.error("cart_add 失败 userId={}, goodsId={}", user.getId(), goodsId, e);
+            return Result.fail(ResultCode.SYSTEM_ERROR);
         }
     }
 
+    /**
+     * 购物车页面（视图接口）
+     */
     @GetMapping("/cart_list")
     public String cartList(HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "redirect:/user_login";
+            return "redirect:/user_login.jsp";
         }
         List<Cart> cartList = cartService.getCartByUserId(user.getId());
         model.addAttribute("cartList", cartList);
         return "goods_cart";
     }
 
+    /**
+     * 修改数量 / 删除（数据接口）
+     */
     @PostMapping("/cart_list")
-    public void cartUpdate(@RequestParam(value = "action", required = false) String action,
-                           @RequestParam(value = "cart_id", required = false) Integer cartId,
-                           @RequestParam(value = "amount", required = false) Integer amount,
-                           HttpServletResponse response) throws IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        if ("update".equals(action) && cartId != null && amount != null) {
-            cartService.updateCartAmount(cartId, amount);
-            out.print("{\"success\":true}");
-        } else if ("delete".equals(action) && cartId != null) {
-            cartService.removeFromCart(cartId);
-            out.print("{\"success\":true}");
-        } else {
-            out.print("{\"success\":false,\"message\":\"参数错误\"}");
+    @ResponseBody
+    public Result<Void> cartUpdate(@RequestParam(value = "action", required = false) String action,
+                                   @RequestParam(value = "cart_id", required = false) Integer cartId,
+                                   @RequestParam(value = "amount", required = false) Integer amount) {
+        try {
+            if ("update".equals(action) && cartId != null && amount != null) {
+                cartService.updateCartAmount(cartId, amount);
+                return Result.success();
+            }
+            if ("delete".equals(action) && cartId != null) {
+                cartService.removeFromCart(cartId);
+                return Result.success();
+            }
+            throw new BusinessException(ResultCode.PARAM_ERROR);
+        } catch (BusinessException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            log.error("cart_list 操作失败 action={}, cartId={}, amount={}", action, cartId, amount, e);
+            return Result.fail(ResultCode.SYSTEM_ERROR);
         }
     }
 }

@@ -45,6 +45,13 @@
             <artifactId>spring-test</artifactId>
         </dependency>
 
+        <!-- JSON 序列化：@EnableWebMvc 在 classpath 上检测到 Jackson 会自动注册
+             MappingJackson2HttpMessageConverter，无需手写 message converter -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
         <!-- MyBatis 相关依赖 -->
         <dependency>
             <groupId>org.mybatis</groupId>

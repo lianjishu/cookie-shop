@@ -17,7 +17,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @EnableWebMvc // 全项目只此一处
-@ComponentScan(basePackages = {"io.github.lianjishu.controller"})
+// handler 包必须在这里扫描：GlobalExceptionHandler 是 @ControllerAdvice，
+// 只有存在于 DispatcherServlet 所在（或其父）容器里才会生效
+@ComponentScan(basePackages = {"io.github.lianjishu.controller", "io.github.lianjishu.handler"})
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final CartCountInterceptor cartCountInterceptor;
@@ -43,7 +45,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     ViewResolver viewResolver() {
         return new InternalResourceViewResolver(
-                "/", //prefix
+                "/WEB-INF/views/", //prefix
                 ".jsp"     //suffix
         );
     }
