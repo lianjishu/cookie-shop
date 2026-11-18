@@ -33,7 +33,8 @@ public class GoodsController {
 
     @RequestMapping("/goods_list")
     public String goodsList(@RequestParam(value = "type_id", required = false) Integer typeId,
-                            @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                            // 参数名必须与 page.jsp 生成的 pageNumber 对齐，否则翻页链接永远落回第 1 页
+                            @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber,
                             Model model) {
         int pageSize = 12;
 
@@ -43,12 +44,15 @@ public class GoodsController {
         Page page;
         if (typeId != null) {
             model.addAttribute("typeId", typeId);
-            page = goodsService.getGoodsByTypeIdByPage(typeId, pageNum, pageSize);
+            page = goodsService.getGoodsByTypeIdByPage(typeId, pageNumber, pageSize);
             model.addAttribute("currentType", goodsService.getTypeById(typeId));
         } else {
-            page = goodsService.getGoodsByPage(pageNum, pageSize);
+            page = goodsService.getGoodsByPage(pageNumber, pageSize);
         }
         model.addAttribute("page", page);
+        // page.jsp 统一用 ${p.*} 渲染分页（admin 列表页也是 p），这里补一个同名引用，
+        // 否则前台分页会显示 [/]、[空] 且「下一页/尾页」被禁用
+        model.addAttribute("p", page);
         return "goods_list";
     }
 

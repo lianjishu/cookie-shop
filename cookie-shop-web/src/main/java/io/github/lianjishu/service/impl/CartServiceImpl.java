@@ -43,20 +43,17 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public boolean updateCartAmount(int cartId, int amount) {
-        if (amount <= 0) {
-            cartMapper.delete(cartId);
-        } else {
-            cartMapper.updateAmount(cartId, amount);
-        }
-        return true;
+    public boolean updateCartAmount(int userId, int cartId, int amount) {
+        int rows = amount <= 0
+                ? cartMapper.deleteByUser(cartId, userId)
+                : cartMapper.updateAmountByUser(cartId, userId, amount);
+        return rows > 0; // 0 行 = 记录不存在，或不属于该用户
     }
 
     @Override
     @Transactional
-    public boolean removeFromCart(int cartId) {
-        cartMapper.delete(cartId);
-        return true;
+    public boolean removeFromCart(int userId, int cartId) {
+        return cartMapper.deleteByUser(cartId, userId) > 0;
     }
 
     @Override

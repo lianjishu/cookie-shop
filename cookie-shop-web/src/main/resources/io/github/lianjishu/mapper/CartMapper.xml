@@ -41,8 +41,13 @@
         UPDATE cart SET amount = #{amount} WHERE id = #{id}
     </update>
 
-    <delete id="delete">
-        DELETE FROM cart WHERE id = #{id}
+    <!-- 数据接口专用：WHERE 里带 user_id，影响行数为 0 即「不存在 or 不属于当前用户」 -->
+    <update id="updateAmountByUser">
+        UPDATE cart SET amount = #{amount} WHERE id = #{id} AND user_id = #{userId}
+    </update>
+
+    <delete id="deleteByUser">
+        DELETE FROM cart WHERE id = #{id} AND user_id = #{userId}
     </delete>
 
     <delete id="clearByUserId">

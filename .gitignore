@@ -21,3 +21,9 @@ cookie-shop-web/src/main/resources/jdbc.properties
 
 # IDE tooling
 /.qoder-credits/
+
+#xx
+.agent
+
+# 运行时日志产物
+cookie-shop-web/logs/

@@ -60,7 +60,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/css/**", "/js/**", "/images/**",
                         "/picture/**", "/fonts/**", "/admin/css/**",
-                        "/admin/js/**", "/admin/img/**"
+                        "/admin/js/**", "/admin/img/**",
+                        // 数据接口只回 JSON、不渲染页面，不需要 cartCount，也省掉一次 SUM 查询
+                        "/cart_add",
+                        // 接口文档（springdoc）：只回 JSON/静态资源，不走购物车查询
+                        "/v3/api-docs/**", "/swagger-ui/**", "/webjars/**"
                 );
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/admin/**");
@@ -86,6 +90,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("/layer/"); //都去webapp下的 /layer/目录里找对应文件
         registry.addResourceHandler("/picture/**") //所有以 /picture/开头的请求
                 .addResourceLocations("/picture/"); //都去webapp下的 /picture/目录里找对应文件
+        // 官方 Swagger UI（webjar 形式打包在依赖里）；springdoc 自带的 SwaggerWebMvcConfigurer
+        // 通常也会注册，此条作兜底保证 /webjars/** 可访问
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     /**

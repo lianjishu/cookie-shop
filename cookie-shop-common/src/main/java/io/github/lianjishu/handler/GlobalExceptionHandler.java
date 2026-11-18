@@ -3,8 +3,11 @@ package io.github.lianjishu.handler;
 import io.github.lianjishu.common.Result;
 import io.github.lianjishu.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.TypeMismatchException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,11 +42,42 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 其余异常：属于 bug 或环境问题，打印完整堆栈供排查，页面只看到友好提示
+     * 参数类型转换失败（如 {@code ?orderId=abc}）：Spring 6.1 的
+     * {@code MethodArgumentTypeMismatchException} 并未实现 {@link ErrorResponse}，
+     * 不单独拦就会落到下面的通用分支被当成 500，这里显式回 400。
+     */
+    @ExceptionHandler(TypeMismatchException.class)
+    public String handleTypeMismatch(TypeMismatchException e, HttpServletRequest req, HttpServletResponse resp) {
+        log.warn("参数类型错误 uri={} message={}", req.getRequestURI(), e.getMessage());
+        return errorView(req, resp, 400);
+    }
+
+    /**
+     * 其余异常：分两类，状态码如实回传，页面都渲染 {@code error} 视图。
+     *
+     * <ul>
+     *     <li>实现了 {@link ErrorResponse} 的异常属于「客户端问题」（400 缺参数、404 路径不存在、
+     *         405 方法不支持、415 媒体类型不对…），用它们自带的状态码 + WARN 日志，不冒充 500；</li>
+     *     <li>其它异常属于程序 bug 或环境问题，固定 500 + ERROR 堆栈。</li>
+     * </ul>
      */
     @ExceptionHandler(Exception.class)
-    public String handleException(Exception e, HttpServletRequest req) {
+    public String handleException(Exception e, HttpServletRequest req, HttpServletResponse resp) {
+        if (e instanceof ErrorResponse errorResponse) {
+            log.warn("请求错误 uri={} status={} message={}",
+                    req.getRequestURI(), errorResponse.getStatusCode().value(), e.getMessage());
+            return errorView(req, resp, errorResponse.getStatusCode().value());
+        }
         log.error("未处理异常 uri={}", req.getRequestURI(), e);
+        return errorView(req, resp, 500);
+    }
+
+    /**
+     * 统一渲染错误视图，并把状态码同时写进响应头与页面（error.jsp 读取 errorStatus）
+     */
+    private String errorView(HttpServletRequest req, HttpServletResponse resp, int status) {
+        resp.setStatus(status);
+        req.setAttribute("errorStatus", status);
         return "error";
     }
 }

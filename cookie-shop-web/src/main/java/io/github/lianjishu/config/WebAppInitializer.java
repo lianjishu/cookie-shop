@@ -18,7 +18,9 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Nullable
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{WebMvcConfig.class};  //子容器 = ServletConfig
+        // OpenApiConfig 必须在此显式注册：配置类不被任何 @ComponentScan 覆盖
+        // （controller/handler/service 之外的 config 包没人扫），漏注册会导致 /v3/api-docs 404
+        return new Class[]{WebMvcConfig.class, OpenApiConfig.class};  //子容器 = ServletConfig
     }
 
     /**

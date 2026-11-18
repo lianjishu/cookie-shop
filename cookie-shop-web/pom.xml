@@ -110,6 +110,13 @@
             <artifactId>junit</artifactId>
         </dependency>
 
+        <!-- 接口文档：springdoc-openapi，传递引入官方 Swagger UI webjar（swagger-ui），
+             访问 /swagger-ui.html；OpenAPI JSON 位于 /v3/api-docs -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
         <!-- 支付宝沙箱 SDK -->
         <dependency>
             <groupId>com.alipay.sdk</groupId>

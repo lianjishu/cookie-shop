@@ -29,9 +29,9 @@
 </head>
 <body>
 <div class="box">
-    <div class="code">500</div>
-    <h1>服务器开小差了</h1>
-    <p>请稍后重试；如果一直出现，请把操作步骤反馈给管理员。</p>
+    <div class="code">${empty errorStatus ? 'Oops' : errorStatus}</div>
+    <h1>页面无法正常显示</h1>
+    <p>可能是链接或参数不对，也可能是服务暂时不可用；请返回首页重试。</p>
     <a href="${pageContext.request.contextPath}/index">返回首页</a>
 </div>
 </body>

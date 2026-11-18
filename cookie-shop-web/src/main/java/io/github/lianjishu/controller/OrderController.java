@@ -2,7 +2,6 @@ package io.github.lianjishu.controller;
 
 import io.github.lianjishu.entity.Cart;
 import io.github.lianjishu.entity.Order;
-import io.github.lianjishu.entity.OrderItem;
 import io.github.lianjishu.entity.User;
 import io.github.lianjishu.service.CartService;
 import io.github.lianjishu.service.OrderService;
@@ -101,24 +100,16 @@ public class OrderController {
         return "order_list";
     }
 
+    /**
+     * 订单详情入口。
+     *
+     * <p>工程里没有 order_detail.jsp，直接返回视图名会 forward 到不存在的资源并 404；
+     * 这里统一回订单列表（列表页已包含订单全部字段）。将来补上详情页时，
+     * 在本方法里恢复「校验归属 → 查明细 → 返回视图」的逻辑即可。</p>
+     */
     @RequestMapping("/order_detail")
-    public String orderDetail(@RequestParam(value = "order_id", required = false) Integer orderId,
-                              HttpServletRequest request, Model model) {
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            return "redirect:/user_login";
-        }
-        if (orderId == null) {
-            return "redirect:/order_list";
-        }
-        Order order = orderService.getOrderDetail(orderId);
-        if (order == null || order.getUser_id() != user.getId()) {
-            return "redirect:/order_list";
-        }
-        List<OrderItem> items = orderService.getOrderItems(orderId);
-        model.addAttribute("order", order);
-        model.addAttribute("items", items);
-        return "order_detail";
+    public String orderDetail() {
+        return "redirect:/order_list";
     }
 
     @GetMapping("/order_cancel")

@@ -96,21 +96,35 @@ public class CartController {
     @ResponseBody
     public Result<Void> cartUpdate(@RequestParam(value = "action", required = false) String action,
                                    @RequestParam(value = "cart_id", required = false) Integer cartId,
-                                   @RequestParam(value = "amount", required = false) Integer amount) {
-        try {
-            if ("update".equals(action) && cartId != null && amount != null) {
-                cartService.updateCartAmount(cartId, amount);
-                return Result.success();
-            }
-            if ("delete".equals(action) && cartId != null) {
-                cartService.removeFromCart(cartId);
-                return Result.success();
-            }
+                                   @RequestParam(value = "amount", required = false) Integer amount,
+                                   HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            throw new BusinessException(ResultCode.NOT_LOGIN);
+        }
+        if (cartId == null) {
             throw new BusinessException(ResultCode.PARAM_ERROR);
+        }
+
+        try {
+            boolean ok;
+            if ("update".equals(action) && amount != null) {
+                ok = cartService.updateCartAmount(user.getId(), cartId, amount);
+            } else if ("delete".equals(action)) {
+                ok = cartService.removeFromCart(user.getId(), cartId);
+            } else {
+                throw new BusinessException(ResultCode.PARAM_ERROR);
+            }
+            if (!ok) {
+                // 0 行 = 这条购物车记录不存在，或不属于当前用户（越权），一码兜住不泄露存在性
+                throw new BusinessException(ResultCode.CART_ITEM_NOT_FOUND);
+            }
+            return Result.success();
         } catch (BusinessException e) {
             throw e;
         } catch (RuntimeException e) {
-            log.error("cart_list 操作失败 action={}, cartId={}, amount={}", action, cartId, amount, e);
+            log.error("cart_list 操作失败 userId={}, action={}, cartId={}, amount={}",
+                    user.getId(), action, cartId, amount, e);
             return Result.fail(ResultCode.SYSTEM_ERROR);
         }
     }

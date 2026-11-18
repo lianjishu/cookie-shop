@@ -12,9 +12,9 @@ public interface CartService {
 
     List<Cart> getCartByUserId(int userId);
 
-    boolean updateCartAmount(int cartId, int amount);
+    boolean updateCartAmount(int userId, int cartId, int amount);
 
-    boolean removeFromCart(int cartId);
+    boolean removeFromCart(int userId, int cartId);
 
     boolean clearCart(int userId);
 }
